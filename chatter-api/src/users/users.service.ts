@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcryptjs from 'bcryptjs';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -37,6 +38,17 @@ export class UsersService {
 
   async remove(_id: string) {
     return await this.usersRepository.findOneAndDelete({ _id });
+  }
+
+  async verifyUser(email: string, password: string): Promise<User> {
+    const user = await this.usersRepository.findOne({ email });
+    const passwordIsValid = bcryptjs.compare(password, user.password);
+
+    if (!passwordIsValid) {
+      throw new UnauthorizedException('Credentials do not match');
+    }
+
+    return user;
   }
 
   private async hashPassword(password: string): Promise<string> {
