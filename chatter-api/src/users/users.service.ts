@@ -42,7 +42,7 @@ export class UsersService {
 
   async verifyUser(email: string, password: string): Promise<User> {
     const user = await this.usersRepository.findOne({ email });
-    const passwordIsValid = bcryptjs.compare(password, user.password);
+    const passwordIsValid = await bcryptjs.compare(password, user.password);
 
     if (!passwordIsValid) {
       throw new UnauthorizedException('Credentials do not match');
