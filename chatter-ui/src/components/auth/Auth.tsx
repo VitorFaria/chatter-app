@@ -4,10 +4,11 @@ import React, { useState } from "react";
 interface IAuthProps {
   submitLabel: string
   onSubmit: (credentials: { email: string, password: string }) => Promise<void>
-  children: React.ReactNode
+  children: React.ReactNode,
+  error?: string;
 }
 
-const Auth = ({ submitLabel, onSubmit, children }: IAuthProps ) => {
+const Auth = ({ submitLabel, onSubmit, children, error }: IAuthProps ) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,8 +22,24 @@ const Auth = ({ submitLabel, onSubmit, children }: IAuthProps ) => {
       margin: "0 auto", 
       justifyContent: "center" }}
     >
-      <TextField type="email" label="Email" variant="outlined" value={email} onChange={(event) => setEmail(event.target.value)} />
-      <TextField type="password" label="Password" variant="outlined" value={password} onChange={(event) => setPassword(event.target.value)}/>
+      <TextField 
+      type="email" 
+      label="Email" 
+      variant="outlined" 
+      value={email} 
+      onChange={(event) => setEmail(event.target.value)} 
+      error={!!error}
+      helperText={error}
+      />
+      <TextField 
+      type="password" 
+      label="Password" 
+      variant="outlined" 
+      value={password} 
+      onChange={(event) => setPassword(event.target.value)}
+      error={!!error}
+      helperText={error}
+      />
 
       <Button variant="contained" onClick={() => onSubmit({email, password})} >{submitLabel}</Button>
       {children}
