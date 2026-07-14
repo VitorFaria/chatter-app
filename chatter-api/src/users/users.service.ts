@@ -15,7 +15,7 @@ export class UsersService {
         password: await this.hashPassword(createUserInput.password)
       });
     } catch (err) {
-      if (err.message.includes('E11000')) {
+      if (err instanceof Error && err.message.includes('E11000')) {
         throw new UnprocessableEntityException('Email already exists.');
       }
       throw err;
