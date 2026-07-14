@@ -1,6 +1,7 @@
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import { useGetMe } from "../../hooks/useGetMe";
 import excludedRoutes from "../../constants/excluded-routes";
+import { authenticatedVar } from "../../constants/authenticated";
 
 interface IGuardProps {
   children: JSX.Element;
@@ -8,6 +9,11 @@ interface IGuardProps {
 
 const Guard = ({children}: IGuardProps) => {
   const { data: user } = useGetMe();
+
+  useEffect(() => {
+    if (user) authenticatedVar(true);
+
+  }, [user]);
 
   return (
     <>
