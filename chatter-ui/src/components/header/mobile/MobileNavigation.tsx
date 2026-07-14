@@ -1,9 +1,11 @@
 import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState } from "react";
+import Router from "../../Routes";
+import { IPage } from "../../../interfaces/page.interface";
 
 interface IMobileNavigationProps {
-  pages: string[];
+  pages: IPage[];
 }
 
 const MobileNavigation = ({ pages }: IMobileNavigationProps) => {
@@ -46,8 +48,11 @@ const MobileNavigation = ({ pages }: IMobileNavigationProps) => {
         sx={{ display: { xs: 'block', md: 'none' } }}
       >
         {pages.map((page) => (
-          <MenuItem key={page} onClick={handleCloseNavMenu}>
-            <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+          <MenuItem key={page.title} onClick={() => {
+            Router.navigate(page.path);
+            handleCloseNavMenu();
+          }}>
+            <Typography sx={{ textAlign: 'center' }}>{page.title}</Typography>
           </MenuItem>
         ))}
       </Menu>
