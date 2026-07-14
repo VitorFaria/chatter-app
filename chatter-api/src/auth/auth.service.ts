@@ -29,4 +29,10 @@ export class AuthService {
       expires
     })
   }
+
+  logout(response: Response): void {
+    response.clearCookie('Authentication', {
+      httpOnly: true,
+    });
+  }
 }
