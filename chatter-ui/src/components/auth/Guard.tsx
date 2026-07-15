@@ -4,6 +4,7 @@ import excludedRoutes from "../../constants/excluded-routes";
 import { authenticatedVar } from "../../constants/authenticated";
 import { UNKNOWN_ERROR_SNACK_MESSAGE } from "../../constants/errors";
 import { snackVar } from "../../constants/snack";
+import { usePath } from "../../hooks/usePath";
 
 interface IGuardProps {
   children: JSX.Element;
@@ -11,6 +12,7 @@ interface IGuardProps {
 
 const Guard = ({children}: IGuardProps) => {
   const { data: user, error } = useGetMe();
+  const { path } = usePath();
 
   useEffect(() => {
     if (user) authenticatedVar(true);
@@ -25,7 +27,7 @@ const Guard = ({children}: IGuardProps) => {
   return (
     <>
       {
-        excludedRoutes.includes(window.location.pathname) 
+        excludedRoutes.includes(path) 
         ? children 
         : user && children
       }
