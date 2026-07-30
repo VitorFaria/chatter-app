@@ -19,8 +19,8 @@ export class ChatsService {
     return await this.chatsRepository.find({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} chat`;
+  findOne(_id: string) {
+    return this.chatsRepository.findOne({ _id });
   }
 
   update(id: number, updateChatInput: UpdateChatInput) {
