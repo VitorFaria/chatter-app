@@ -22,7 +22,7 @@ export type CreateUserInput = {
 
 export type ChatFragmentFragment = { _id: string, userId: string, isPrivate: boolean, userIds: Array<string>, name: string | null };
 
-export type MessageFragmentFragment = { _id: string, content: string, createdAt: unknown };
+export type MessageFragmentFragment = { _id: string, content: string, createdAt: string };
 
 export type CreateChatMutationVariables = Exact<{
   createChatInput: CreateChatInput;
@@ -36,7 +36,7 @@ export type CreateMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateMessageMutation = { createMessage: { _id: string, content: string, createdAt: unknown } };
+export type CreateMessageMutation = { createMessage: { _id: string, content: string, createdAt: string } };
 
 export type CreateUserMutationVariables = Exact<{
   createUserInput: CreateUserInput;
@@ -67,7 +67,7 @@ export type MessagesQueryVariables = Exact<{
 }>;
 
 
-export type MessagesQuery = { messages: Array<{ _id: string, content: string, createdAt: unknown }> };
+export type MessagesQuery = { messages: Array<{ _id: string, content: string, createdAt: string }> };
 
 export const ChatFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChatFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Chat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"isPrivate"}},{"kind":"Field","name":{"kind":"Name","value":"userIds"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]} as unknown as DocumentNode<ChatFragmentFragment, unknown>;
 export const MessageFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Message"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"_id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageFragmentFragment, unknown>;
