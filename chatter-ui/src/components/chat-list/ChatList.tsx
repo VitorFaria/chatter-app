@@ -27,8 +27,7 @@ const ChatList = () => {
       <ChatListHeader handleAddChat={() => setChatListAddVisible(true)} />
       <Divider/>
       <List sx={{ 
-        width: '100%', 
-        maxWidth: 360, 
+        width: '100%',
         bgcolor: 'background.paper', 
         maxHeight: '80vh', 
         overflow: 'auto' 
