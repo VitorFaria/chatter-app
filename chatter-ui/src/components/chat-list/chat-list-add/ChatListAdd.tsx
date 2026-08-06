@@ -3,6 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 import { useCreateChat } from "../../../hooks/useCreateChat";
 import { UNKNOWN_ERROR_MESSAGE } from "../../../constants/errors";
+import Router from "../../Routes";
 
 interface IChatListAddProps {
   open: boolean;
@@ -75,12 +76,13 @@ const ChatListAdd = ({ open, handleClose}: IChatListAddProps) => {
             return;
           }
           try {
-            await createChat({
+            const chat = await createChat({
               variables: {
                 createChatInput: {isPrivate, name: name || undefined }
               }
             });
-            handleClose();
+            onClose();
+            Router.navigate(`/chats/${chat.data?.createChat._id}`);
           } catch (err) {
             setError(UNKNOWN_ERROR_MESSAGE);
           }
