@@ -9,14 +9,18 @@ import { ChatFragmentFragment as Chat } from '../../../gql/graphql';
 import Router from '../../Routes';
 
 interface IChatListProps {
-  chat: Chat
+  chat: Chat,
+  selected: boolean;
 }
 
-const ChatListItem = ({ chat }: IChatListProps) => {
+const ChatListItem = ({ chat, selected }: IChatListProps) => {
   return (
     <>
       <ListItem alignItems="flex-start">
-        <ListItemButton onClick={() => Router.navigate(`/chats/${chat._id}`)}>
+        <ListItemButton 
+          onClick={() => Router.navigate(`/chats/${chat._id}`)}
+          selected={selected}
+        >
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
           </ListItemAvatar>
