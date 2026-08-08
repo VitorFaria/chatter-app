@@ -1,0 +1,15 @@
+import { useSubscription } from "@apollo/client";
+import { graphql } from "../gql";
+import { MessageCreatedSubscriptionVariables } from "../gql/graphql";
+
+const messageCreatedDocument = graphql(`
+  subscription messageCreated($chatId: String!) {
+    messageCreated(chatId: $chatId) {
+      ...MessageFragment
+    }
+  }  
+`);
+
+export const useMessageCreated = (variables: MessageCreatedSubscriptionVariables) => {
+  return useSubscription(messageCreatedDocument, { variables });
+}
