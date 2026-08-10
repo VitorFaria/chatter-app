@@ -12,13 +12,12 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const chatId = params._id!
   const { data: chat } = useGetChat({ _id: chatId })
-  const [createMessage] = useCreateMessage(chatId);
+  const [createMessage] = useCreateMessage();
   const { data: messages } = useGetMessages({ chatId });
   const divRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
-  const { data: latestMessage } = useMessageCreated({ chatId });
 
-  console.log("latestMessage", latestMessage);
+  useMessageCreated({ chatId });
 
   const scrollToBottom = () => divRef.current?.scrollIntoView();
 
@@ -46,8 +45,15 @@ const Chat = () => {
     <Stack sx={{ height: '100%', justifyContent: 'space-between'}}>
       <h1>{chat?.chat.name}</h1>
       <Box sx={{ maxHeight: '70vh', overflow: 'auto'}}>
-        {messages?.messages.map((message) => (
-          <Grid container alignItems="center" marginBottom="1rem">
+        {messages &&
+          [...messages.messages]
+            .sort(
+              (messageA, messageB) =>
+                new Date(messageA.createdAt).getTime() -
+                new Date(messageB.createdAt).getTime()
+            )
+        .map((message) => (
+          <Grid key={message._id} container alignItems="center" marginBottom="1rem">
             <Grid size={{ xs: 2, lg: 1}}>
               <Avatar src="" sx={{ width: 52, height: 52 }}/>
             </Grid>
