@@ -41,7 +41,7 @@ const ChatListItem = ({ chat, selected }: IChatListProps) => {
           />
         </ListItemButton>
       </ListItem>
-      <Divider variant="inset" component="li" />
+      <Divider variant="inset" />
     </>
   )
 }
