@@ -46,11 +46,14 @@ export class MessagesService {
     return message;
   }
 
-  async getMessages({ chatId }: GetMessagesArgs) {
+  async getMessages({ chatId, skip, limit }: GetMessagesArgs) {
     return this.chatsRepository.model.aggregate([
       { $match: { _id: new Types.ObjectId(chatId) } },
       { $unwind: '$messages' },
       { $replaceRoot: { newRoot: '$messages'} },
+      { $sort: { createdAt: -1} },
+      { $skip: skip },
+      { $limit: limit },
       {
         $lookup: {
           from: 'users',
@@ -63,6 +66,15 @@ export class MessagesService {
       { $unset: 'userId' },
       { $set: { chatId } }
     ]);
+  }
+
+  async countMessages(chatId: string) {
+    return (await this.chatsRepository.model.aggregate([
+      { $match: { _id: new Types.ObjectId(chatId) } },
+      { $unwind: '$messages' },
+      { $count: 'messages' }
+    ]
+    ))[0];
   }
 
   async messageCreated() {
