@@ -5,6 +5,9 @@ import SendIcon from '@mui/icons-material/Send';
 import { useEffect, useRef, useState } from "react";
 import { useCreateMessage } from "../../hooks/useCreateMessage";
 import { useGetMessages } from "../../hooks/useGetMessages";
+import { PAGE_SIZE } from "../../constants/page-size";
+import { useCountMessages } from "../../hooks/useCountMessages";
+import InfiniteScroll from "react-infinite-scroller";
 
 const Chat = () => {
   const params = useParams();
@@ -12,15 +15,26 @@ const Chat = () => {
   const chatId = params._id!
   const { data: chat } = useGetChat({ _id: chatId })
   const [createMessage] = useCreateMessage();
-  const { data: messages } = useGetMessages({ chatId });
+  const { data: messages, fetchMore } = useGetMessages({ 
+    chatId,
+    skip: 0,
+    limit: PAGE_SIZE
+  });
   const divRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
+  const { messagesCount, countMessages } = useCountMessages(chatId);
+
+  useEffect(() => {
+    countMessages();
+  }, [countMessages]);
 
   const scrollToBottom = () => divRef.current?.scrollIntoView();
 
   useEffect(() => {
-    setMessage("");
-    scrollToBottom();
+    if (messages && messages.messages.length <= PAGE_SIZE) {
+      setMessage("");
+      scrollToBottom();
+    }
   }, [location, messages]);
 
   const handleCreateMessage = async () => {
@@ -42,33 +56,51 @@ const Chat = () => {
     <Stack sx={{ height: '100%', justifyContent: 'space-between'}}>
       <h1>{chat?.chat.name}</h1>
       <Box sx={{ maxHeight: '70vh', overflow: 'auto'}}>
-        {messages &&
+        <InfiniteScroll
+          pageStart={0}
+          isReverse={true}
+          loadMore={() => fetchMore({ 
+            variables: {
+              skip: messages?.messages.length,
+            },
+          })
+        }
+        hasMore={
+          messages && messagesCount 
+          ? messages.messages.length < messagesCount
+          : false
+        }
+        useWindow={false}
+        >
+          {messages &&
           [...messages.messages]
             .sort(
               (messageA, messageB) =>
                 new Date(messageA.createdAt).getTime() -
                 new Date(messageB.createdAt).getTime()
             )
-        .map((message) => (
-          <Grid key={message._id} container alignItems="center" marginBottom="1rem">
-            <Grid size={{ xs: 2, lg: 1}}>
-              <Avatar src="" sx={{ width: 52, height: 52 }}/>
-            </Grid>
-            <Grid size={{ xs: 10, lg: 11}}>
-              <Stack>
-                <Paper sx={{ width: 'fit-content'}}>
-                  <Typography sx={{ padding: '0.9rem'}}>
-                    {message.content}
-                  </Typography>
-                </Paper>
-                <Typography variant="caption" sx={{ marginLeft: "0.25rem"}}>
-                  {new Date(message.createdAt).toLocaleTimeString()}
-                </Typography>
-              </Stack>
-            </Grid>
-          </Grid>
-        ))}
-        <div ref={divRef}></div>
+            .map((message) => (
+              <Grid key={message._id} container alignItems="center" marginBottom="1rem">
+                <Grid size={{ xs: 2, lg: 1}}>
+                  <Avatar src="" sx={{ width: 52, height: 52 }}/>
+                </Grid>
+                <Grid size={{ xs: 10, lg: 11}}>
+                  <Stack>
+                    <Paper sx={{ width: 'fit-content'}}>
+                      <Typography sx={{ padding: '0.9rem'}}>
+                        {message.content}
+                      </Typography>
+                    </Paper>
+                    <Typography variant="caption" sx={{ marginLeft: "0.25rem"}}>
+                      {new Date(message.createdAt).toLocaleTimeString()} - {" "}
+                      {new Date(message.createdAt).toLocaleDateString()}
+                    </Typography>
+                  </Stack>
+                </Grid>
+              </Grid>
+            ))}
+            <div ref={divRef}></div>
+        </InfiniteScroll>
       </Box>
       <Paper sx={{
         p: '2px 4px',
