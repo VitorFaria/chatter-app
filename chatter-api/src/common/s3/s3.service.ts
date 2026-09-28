@@ -34,7 +34,7 @@ export class S3Service {
     )
   }
 
-  async getObjectUrl(bucket: string, key: string) {
+  getObjectUrl(bucket: string, key: string) {
     return `https://${bucket}.s3.amazonaws.com/${key}`;
   }
 }
