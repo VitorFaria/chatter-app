@@ -74,12 +74,14 @@ export class MessagesService {
   }
 
   async countMessages(chatId: string) {
-    return (await this.chatsRepository.model.aggregate([
+    const items = (await this.chatsRepository.model.aggregate([
       { $match: { _id: new Types.ObjectId(chatId) } },
       { $unwind: '$messages' },
       { $count: 'messages' }
     ]
     ))[0];
+
+    return items ?? { messages: 0};
   }
 
   async messageCreated() {
