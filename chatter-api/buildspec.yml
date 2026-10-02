@@ -1,0 +1,31 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo Entrando na pasta do backend NestJS...
+      - cd chatter-api
+      - echo Habilitando o Corepack / Yarn...
+      - corepack enable
+      - echo Instalando dependencias com Yarn...
+      - yarn install --frozen-lockfile
+
+  pre_build:
+    commands:
+      - echo Verificando sintaxe com o linter...
+      - yarn lint
+
+  build:
+    commands:
+      - echo Compilando a aplicacao NestJS...
+      - yarn build
+
+artifacts:
+  base-directory: 'chatter-api'
+  files:
+    - 'dist/**/*'
+    - 'package.json'
+    - 'yarn.lock'
+    - 'Procfile'
