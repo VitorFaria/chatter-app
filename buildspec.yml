@@ -12,11 +12,6 @@ phases:
       - echo Instalando dependencias com Yarn...
       - yarn install --frozen-lockfile
 
-  pre_build:
-    commands:
-      - echo Preparando para compilar...
-      - cd chatter-api
-
   build:
     commands:
       - echo Compilando a aplicacao NestJS...
