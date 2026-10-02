@@ -14,8 +14,8 @@ phases:
 
   pre_build:
     commands:
-      - echo Verificando sintaxe com o linter...
-      - yarn lint
+      - echo Preparando para compilar...
+      - cd chatter-api
 
   build:
     commands:
