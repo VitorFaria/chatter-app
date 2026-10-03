@@ -24,3 +24,4 @@ artifacts:
     - 'package.json'
     - 'yarn.lock'
     - 'Procfile'
+    - '.ebextensions/**/*'
