@@ -5,18 +5,18 @@ phases:
     runtime-versions:
       nodejs: 22
     commands:
-      - echo Entrando na pasta do backend NestJS...
+      - echo "Entrando no diretorio do backend NestJS..."
       - cd chatter-api
-      - echo Habilitando o Corepack / Yarn...
+      - echo "Habilitando Corepack para o Yarn..."
       - corepack enable
-      - echo Instalando dependencias com Yarn...
+      - echo "Instalando dependencias para o Build..."
       - yarn install --frozen-lockfile
 
   build:
     commands:
-      - echo Compilando a aplicacao NestJS...
+      - echo "Compilando a aplicacao NestJS..."
       - yarn build
-      - echo Preparando artefato: limpando node_modules local e criando pasta vazia para o Beanstalk...
+      - echo "Preparando artefato: criando node_modules vazia..."
       - rm -rf node_modules
       - mkdir -p node_modules
       - touch node_modules/.keep
