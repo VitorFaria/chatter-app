@@ -16,12 +16,17 @@ phases:
     commands:
       - echo Compilando a aplicacao NestJS...
       - yarn build
+      - echo Preparando artefato: limpando node_modules local e criando pasta vazia para o Beanstalk...
+      - rm -rf node_modules
+      - mkdir -p node_modules
+      - touch node_modules/.keep
 
 artifacts:
   base-directory: 'chatter-api'
   files:
     - 'dist/**/*'
+    - 'node_modules/**/*'
     - 'package.json'
     - 'yarn.lock'
     - 'Procfile'
-    - '.ebextensions/**/*'
+    - '.platform/**/*'
