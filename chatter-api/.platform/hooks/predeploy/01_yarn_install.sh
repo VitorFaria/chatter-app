@@ -1,14 +1,8 @@
 #!/bin/bash
 set -e
 
-# Entra na pasta temporaria onde a aplicacao fica antes de subir
+# Entra na pasta temporaria de staging do Beanstalk
 cd /var/app/staging
 
-echo "==> Instalando Corepack para gerenciar o Yarn..."
-npm install -g corepack
-
-echo "==> Habilitando Corepack..."
-corepack enable
-
-echo "==> Executando yarn install de producao..."
-yarn install --frozen-lockfile
+echo "==> Módulos de produção pré-instalados via CodeBuild detectados."
+echo "==> Pulando yarn install no servidor para preservar as dependências de runtime."
