@@ -11,4 +11,4 @@ echo "==> Habilitando Corepack..."
 corepack enable
 
 echo "==> Executando yarn install de producao..."
-yarn install --production --frozen-lockfile
+yarn install --frozen-lockfile
