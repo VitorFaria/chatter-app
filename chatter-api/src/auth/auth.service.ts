@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { User } from 'src/users/entities/user.entity';
 import { TokenPayload } from './token-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { getJwt } from './jwt';
 
 @Injectable()
 export class AuthService {
@@ -11,7 +12,7 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService
   ) {}
-  async login(user: User, response: Response): Promise<void> {
+  async login(user: User, response: Response): Promise<string> {
     const expires = new Date();
     expires.setSeconds(
       expires.getSeconds() + this.configService.getOrThrow('JWT_EXPIRATION')
@@ -27,15 +28,17 @@ export class AuthService {
     response.cookie('Authentication', token, {
       httpOnly: true,
       expires
-    })
+    });
+
+    return token;
   }
 
-  verifyWs(request: Request): TokenPayload {
+  verifyWs(request: Request, connectionParams: any = {}): TokenPayload {
     const cookies: string[] = request.headers.cookie.split('; ');
     const authCookie = cookies.find((cookie) => cookie.includes('Authentication'));
 
     const jwt = authCookie.split('Authentication=')[1];
-    return this.jwtService.verify(jwt);
+    return this.jwtService.verify(jwt || getJwt(connectionParams.token));
   }
 
   logout(response: Response): void {
